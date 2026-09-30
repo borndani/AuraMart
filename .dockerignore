@@ -1,0 +1,25 @@
+# Step A: Bring in a tiny computer with Node.js to build the code
+FROM node:20-alpine AS builder
+
+# Step B: Set up a workspace inside that tiny computer
+WORKDIR /app
+
+# Step C: Copy package files and install the dependencies
+COPY package*.json ./
+RUN npm install
+
+# Step D: Copy the rest of your app code and turn it into static web pages
+COPY . .
+RUN npm run build
+
+# Step E: Bring in a super fast web server (Nginx) to show the web pages
+FROM nginx:alpine
+
+# Step F: Copy the built web pages into Nginx's public folder
+# Note: If your project uses Vite, it creates a 'dist' folder. If Create React App, change 'dist' to 'build'.
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Step G: Open up port 80 so visitors can see the website
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
