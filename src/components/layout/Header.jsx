@@ -12,7 +12,12 @@ export default function Header({
   onOpenCart,
   onOpenWishlist,
   onNavigateHome,
-  onNavigateShop
+  onNavigateShop,
+  // Auth & Admin Props
+  user = null,
+  onOpenAuth,
+  onLogout,
+  onNavigateAdmin,
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -35,7 +40,7 @@ export default function Header({
         </div>
       </div>
 
-      {/* 2. Main Search & Navigation Header (Amazon / Jumia style) */}
+      {/* 2. Main Search & Navigation Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
         
         {/* Brand Logo */}
@@ -56,7 +61,7 @@ export default function Header({
           </div>
         </div>
 
-        {/* Amazon-style Integrated Search Bar */}
+        {/* Integrated Search Bar */}
         <div className="hidden md:flex flex-1 max-w-2xl mx-4">
           <div className="flex w-full rounded-xl overflow-hidden bg-slate-800 border border-slate-700 focus-within:border-amber-400 focus-within:ring-2 focus-within:ring-amber-400/20 transition duration-200">
             
@@ -93,8 +98,41 @@ export default function Header({
           </div>
         </div>
 
-        {/* User Quick Actions (Wishlist & Cart) */}
-        <div className="flex items-center gap-3 sm:gap-5">
+        {/* User Quick Actions (Auth, Wishlist & Cart) */}
+        <div className="flex items-center gap-3 sm:gap-4">
+
+          {/* Admin Badge (Only visible if logged-in user has role === 'admin') */}
+          {user?.role === 'admin' && (
+            <button
+              onClick={onNavigateAdmin}
+              className="hidden sm:flex text-xs font-bold text-amber-400 bg-amber-400/10 hover:bg-amber-400/20 px-3 py-2 rounded-xl border border-amber-400/30 transition items-center gap-1"
+            >
+              👑 <span>Admin</span>
+            </button>
+          )}
+
+          {/* Login / User Session Control */}
+          {user ? (
+            <div className="flex items-center gap-2 bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
+              <span className="text-xs font-medium text-slate-300 hidden sm:inline">
+                Hi, <strong className="text-amber-400">{user.name}</strong>
+              </span>
+              <button
+                onClick={onLogout}
+                className="text-xs font-bold text-red-400 hover:text-red-300 transition"
+                title="Log Out"
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={onOpenAuth}
+              className="text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white px-3.5 py-2.5 rounded-xl border border-slate-700 transition"
+            >
+              Log In / Sign Up
+            </button>
+          )}
           
           {/* Wishlist Button */}
           <button 
@@ -103,7 +141,7 @@ export default function Header({
             title="Wishlist"
           >
             <span className="text-lg">❤️</span>
-            <span className="hidden sm:inline text-xs font-semibold">Wishlist</span>
+            <span className="hidden lg:inline text-xs font-semibold">Wishlist</span>
             {wishlistCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
                 {wishlistCount}
@@ -117,7 +155,7 @@ export default function Header({
             className="relative bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-xl transition duration-200 flex items-center gap-2 shadow-lg shadow-amber-500/10"
           >
             <span className="text-base">🛍️</span>
-            <span>Cart</span>
+            <span className="hidden sm:inline">Cart</span>
             {cartCount > 0 && (
               <span className="bg-slate-950 text-amber-400 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full min-w-[18px]">
                 {cartCount}
@@ -127,7 +165,7 @@ export default function Header({
         </div>
       </div>
 
-      {/* Mobile Search Bar Input (Visible on small screens) */}
+      {/* Mobile Search Bar Input */}
       <div className="md:hidden px-4 pb-3">
         <div className="flex w-full rounded-lg overflow-hidden bg-slate-800 border border-slate-700">
           <input

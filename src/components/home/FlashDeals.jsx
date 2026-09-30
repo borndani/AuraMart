@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../ui/ProductCard';
 
-export default function FlashDeals({ products, onAddToCart, onQuickView }) {
+export default function FlashDeals({ products = [], onAddToCart, onQuickView }) {
   // 12-hour countdown timer
   const [timeLeft, setTimeLeft] = useState({ hours: 11, minutes: 59, seconds: 59 });
 
@@ -51,7 +51,7 @@ export default function FlashDeals({ products, onAddToCart, onQuickView }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {products.slice(0, 4).map((product) => (
           <ProductCard
-            key={product.id}
+            key={product.id || Math.random()}
             product={product}
             onAddToCart={onAddToCart}
             onQuickView={onQuickView}
