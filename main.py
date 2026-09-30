@@ -13,7 +13,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://aura-mart-beta.vercel.app/",  # Your exact Vercel frontend domain
+        "https://aura-mart-beta.vercel.app", 
+        "https://aura-mart-d2x6m9nzr-daniels-projects-198c9652.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
